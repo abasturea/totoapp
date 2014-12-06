@@ -1,4 +1,4 @@
-package com.alex.totoapp.rssfetcher;
+package com.alex.totoapp.totofetchers;
 
 import org.xmlpull.v1.XmlPullParser;
 

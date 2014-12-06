@@ -1,4 +1,4 @@
-package com.alex.totoapp.rssitem;
+package com.alex.totoapp.totoitems;
 
 import android.os.Parcel;
 import android.os.Parcelable;

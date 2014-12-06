@@ -1,13 +1,13 @@
-package com.alex.totoapp.rssloader;
+package com.alex.totoapp.totoloaders;
 
 import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.alex.totoapp.rssapp.RssAdapter;
-import com.alex.totoapp.rssitem.RssItem;
-import com.alex.totoapp.rssprovider.Provider;
+import com.alex.totoapp.totoapp.RssAdapter;
+import com.alex.totoapp.totoitems.RssItem;
+import com.alex.totoapp.totoproviders.RssProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +28,7 @@ public class RssLoaderImpl implements RssLoader {
         Log.i(TAG, "Creating RssLoader.");
 
         try {
-            return new Provider(context, new URL(args.get("link").toString()));
+            return new RssProvider(context, new URL(args.get("link").toString()));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;

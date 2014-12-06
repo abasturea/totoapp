@@ -1,12 +1,12 @@
-package com.alex.totoapp.rssprovider;
+package com.alex.totoapp.totoproviders;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
 
-import com.alex.totoapp.rssitem.RssItem;
-import com.alex.totoapp.rssfetcher.RssFetcher;
-import com.alex.totoapp.rssfetcher.RssFetcherImpl;
+import com.alex.totoapp.totoitems.RssItem;
+import com.alex.totoapp.totofetchers.RssFetcher;
+import com.alex.totoapp.totofetchers.RssFetcherImpl;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Provider extends AsyncTaskLoader<List<RssItem>> {
+public class RssProvider extends AsyncTaskLoader<List<RssItem>> {
 
     private static final String TAG = "Provider";
 
@@ -27,7 +27,7 @@ public class Provider extends AsyncTaskLoader<List<RssItem>> {
 
     private RssFetcher fetcher = new RssFetcherImpl();
 
-    public Provider(Context context, URL url) {
+    public RssProvider(Context context, URL url) {
         super(context);
         this.url = url;
     }

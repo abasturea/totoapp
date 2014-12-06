@@ -1,9 +1,9 @@
-package com.alex.totoapp.rssapp;
+package com.alex.totoapp.totoapp;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
-import com.alex.totoapp.rssitem.RssItem;
+import com.alex.totoapp.totoitems.RssItem;
 
 import java.util.List;
 

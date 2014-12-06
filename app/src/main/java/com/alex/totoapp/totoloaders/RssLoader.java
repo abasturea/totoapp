@@ -1,8 +1,8 @@
-package com.alex.totoapp.rssloader;
+package com.alex.totoapp.totoloaders;
 
 import android.app.LoaderManager;
 
-import com.alex.totoapp.rssitem.RssItem;
+import com.alex.totoapp.totoitems.RssItem;
 
 import java.util.List;
 

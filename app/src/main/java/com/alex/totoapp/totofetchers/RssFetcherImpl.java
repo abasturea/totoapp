@@ -1,4 +1,4 @@
-package com.alex.totoapp.rssfetcher;
+package com.alex.totoapp.totofetchers;
 
 import android.util.Log;
 

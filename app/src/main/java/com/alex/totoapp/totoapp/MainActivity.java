@@ -1,9 +1,10 @@
-package com.alex.totoapp.rssapp;
+package com.alex.totoapp.totoapp;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,9 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.alex.totoapp.R;
-import com.alex.totoapp.rssitem.RssItem;
-import com.alex.totoapp.rssloader.RssLoader;
-import com.alex.totoapp.rssloader.RssLoaderImpl;
+import com.alex.totoapp.totoitems.RssItem;
+import com.alex.totoapp.totoloaders.RssLoader;
+import com.alex.totoapp.totoloaders.RssLoaderImpl;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
 
     private static ArrayList<RssItem> rssItems = new ArrayList<RssItem>();
     private RssAdapter adapter = null;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,4 +78,3 @@ public class MainActivity extends Activity {
         adapter.notifyDataSetChanged();
     }
 }
-
