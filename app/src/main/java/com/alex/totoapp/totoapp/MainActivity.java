@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,28 +27,27 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
 
     private static ArrayList<RssItem> rssItems = new ArrayList<RssItem>();
-    private RssAdapter adapter = null;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private RssAdapter rssAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
-        adapter = new RssAdapter(this, android.R.layout.simple_list_item_1, rssItems);
+        ListView itemsListView = (ListView) findViewById(R.id.listView);
+        rssAdapter = new RssAdapter(this, android.R.layout.simple_list_item_1, rssItems);
 
         Button setButton = (Button) findViewById(R.id.setButton);
         final TextView urlText = (TextView) findViewById(R.id.urlText);
 
-        listView.setAdapter(adapter);
+        itemsListView.setAdapter(rssAdapter);
 
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "Started setting a new list for: " + urlText);
 
-                RssLoader rssLoader = new RssLoaderImpl(MainActivity.this, adapter);
+                RssLoader rssLoader = new RssLoaderImpl(MainActivity.this, rssAdapter);
                 Bundle loaderBundle = new Bundle();
                 loaderBundle.putString(RSS_FEED_LINK, urlText.getText().toString());
 
@@ -60,7 +59,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "Clicked on position:" + position);
@@ -72,9 +71,9 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        adapter.notifyDataSetChanged();
+        rssAdapter.notifyDataSetChanged();
     }
 }
