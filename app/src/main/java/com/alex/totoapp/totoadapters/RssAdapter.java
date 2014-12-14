@@ -1,4 +1,4 @@
-package com.alex.totoapp.totoapp;
+package com.alex.totoapp.totoadapters;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

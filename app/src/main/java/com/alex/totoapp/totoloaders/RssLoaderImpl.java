@@ -5,7 +5,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.alex.totoapp.totoapp.RssAdapter;
+import com.alex.totoapp.totoadapters.RssAdapter;
 import com.alex.totoapp.totoitems.RssItem;
 import com.alex.totoapp.totoproviders.RssProvider;
 

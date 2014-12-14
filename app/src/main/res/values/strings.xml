@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">TotoApp</string>
+    <string name="app_name">Toto</string>
     <string name="set_button">Set</string>
+    <string name="action_settings">Settings</string>
 </resources>
