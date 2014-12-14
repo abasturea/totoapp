@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate");
 
-        if(savedInstanceState != null && savedInstanceState.getCharSequence(TITLE) != null) {
+        if (savedInstanceState != null && savedInstanceState.getCharSequence(TITLE) != null) {
             title = savedInstanceState.getCharSequence(TITLE);
         } else {
             title = getTitle();
@@ -66,7 +66,6 @@ public class MainActivity extends Activity {
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setHomeButtonEnabled(true);
-            getActionBar().setTitle(title);
         }
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.app_name, R.string.app_name) {
@@ -82,6 +81,8 @@ public class MainActivity extends Activity {
         };
 
         drawerLayout.setDrawerListener(drawerToggle);
+
+
     }
 
     @Override
@@ -104,6 +105,15 @@ public class MainActivity extends Activity {
         super.onPostCreate(savedInstanceState);
 
         drawerToggle.syncState();
+
+        if(getActionBar() != null) {
+            boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+            if (drawerOpen) {
+                getActionBar().setTitle(drawerTitle);
+            } else {
+                getActionBar().setTitle(title);
+            }
+        }
     }
 
     @Override
@@ -126,17 +136,29 @@ public class MainActivity extends Activity {
         }
 
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_settings: {
+                displayFragment(new SettingsFragment());
                 return true;
+            }
+            case R.id.action_add_feed: {
+                displayFragment(new AddFeedFragment());
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void displayFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_add_feed).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -144,10 +166,10 @@ public class MainActivity extends Activity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            displayView(position);
+            displayFeedView(position);
         }
 
-        private void displayView(int position) {
+        private void displayFeedView(int position) {
 
             Fragment fragment = new RssFeedFragment();
 

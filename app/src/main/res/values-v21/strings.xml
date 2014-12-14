@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">Toto</string>
+
+    <!-- settings -->
     <string name="action_settings">Settings</string>
+
+    <!-- add feed -->
+    <string name="action_add_feed">Add feed</string>
+    <string name="add_feed_title">Feed title:</string>
+    <string name="add_feed_url">Feed url:</string>
+    <string name="add_feed_button">Add feed</string>
+
 </resources>
