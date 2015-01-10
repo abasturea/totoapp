@@ -1,2 +1,2 @@
 # totoapp
-This is a rss feed application.
+This is a android rss feed reader application.
