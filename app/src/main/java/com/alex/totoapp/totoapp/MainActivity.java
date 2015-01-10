@@ -18,13 +18,14 @@ import android.widget.ListView;
 import com.alex.totoapp.R;
 import com.alex.totoapp.totoadapters.FeedAdapter;
 import com.alex.totoapp.totoitems.FeedItem;
+import com.alex.totoapp.totoloaders.FeedsLoader;
+import com.alex.totoapp.totoloaders.RssLoader;
 
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
-    private static final String RSS_FEED_LINK = "link";
     private static final String TITLE = "title";
 
     private DrawerLayout drawerLayout = null;
@@ -56,12 +57,22 @@ public class MainActivity extends Activity {
         drawerList.setOnItemClickListener(new SlideMenuClickListener());
 
         feedItems = new ArrayList<FeedItem>();
+
         /* hardcoded */
-        feedItems.add(new FeedItem("Realitatea", "http://rss.realitatea.net/stiri.xml"));
-        feedItems.add(new FeedItem("ProTv", "http://www.protv.ro/rss"));
+        //feedItems.add(new FeedItem("Realitatea", "http://rss.realitatea.net/stiri.xml"));
+        //feedItems.add(new FeedItem("ProTv", "http://www.protv.ro/rss"));
+        /**/
 
         FeedAdapter feedAdapter = new FeedAdapter(getApplicationContext(), feedItems);
         drawerList.setAdapter(feedAdapter);
+
+        FeedsLoader feedsLoader = new FeedsLoader(MainActivity.this, feedAdapter);
+
+        if (getLoaderManager().getLoader(FeedsLoader.FEEDS_LINK_ID) != null) {
+            getLoaderManager().restartLoader(FeedsLoader.FEEDS_LINK_ID, null, feedsLoader);
+        } else {
+            getLoaderManager().initLoader(FeedsLoader.FEEDS_LINK_ID, null, feedsLoader);
+        }
 
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,8 +92,6 @@ public class MainActivity extends Activity {
         };
 
         drawerLayout.setDrawerListener(drawerToggle);
-
-
     }
 
     @Override
@@ -149,17 +158,17 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void displayFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-    }
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         menu.findItem(R.id.action_add_feed).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void displayFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
 
     private class SlideMenuClickListener implements ListView.OnItemClickListener {
@@ -176,7 +185,7 @@ public class MainActivity extends Activity {
             Log.i(TAG, "Creating fragment");
 
             Bundle fragmentArgs = new Bundle();
-            fragmentArgs.putString(RSS_FEED_LINK, feedItems.get(position).getUrl());
+            fragmentArgs.putString(RssLoader.RSS_LINK, feedItems.get(position).getUrl());
             fragment.setArguments(fragmentArgs);
 
             FragmentManager fragmentManager = getFragmentManager();

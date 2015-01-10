@@ -23,6 +23,11 @@ public class FeedAdapter extends BaseAdapter {
         this.feedDrawerItems = feedDrawerItems;
     }
 
+    public void setFeedDrawerItems(ArrayList<FeedItem> feedDrawerItems) {
+        this.feedDrawerItems.clear();
+        this.feedDrawerItems.addAll(feedDrawerItems);
+    }
+
     @Override
     public int getCount() {
         return feedDrawerItems.size();

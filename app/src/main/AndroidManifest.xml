@@ -18,6 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider android:name=".totoproviders.FeedContentProvider"
+            android:authorities="com.alex.totoapp.Feeds">
+        </provider>
     </application>
 
 </manifest>
