@@ -49,5 +49,9 @@ The app will allow the user, to add a feed or create his on personalized feeds b
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
         
-  
+  For further development:
+    - caching the retrieved rss items for a lesser internet data usage
+    - inserting new elemens to the rssItems, like thumbnails and short descriptions
+    - making a simpler way to add a website (considering crawlers)
+    - investigate design elements for the gui / make a more pleasant gui
   
