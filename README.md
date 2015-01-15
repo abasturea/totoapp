@@ -44,5 +44,10 @@ The app will allow the user, to add a feed or create his on personalized feeds b
         eventType = xpp.next();
     }
     
-    
+  There is only one Activity, a main activity, that contains a app drawer for displaying all the feeds in the content provider. The other elements are stored in fragments, and shown by the displayFragment function:
+  
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+        
+  
   
