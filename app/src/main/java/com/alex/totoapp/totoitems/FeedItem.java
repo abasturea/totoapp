@@ -1,28 +1,50 @@
 package com.alex.totoapp.totoitems;
 
-public class FeedItem {
+import java.io.Serializable;
 
-    private String title;
-    private String url;
+public class FeedItem implements Serializable {
 
-    public FeedItem( String title, String url ) {
-        this.title = title;
-        this.url = url;
+    private static final long serialVersionUID = -7406082437623008161L;
+
+    private long mId;
+    private String mTitle;
+    private String mLink;
+
+    public FeedItem() {
     }
 
-    public String getUrl() {
-        return url;
+    public FeedItem(long id, String title, String link) {
+        mId = id;
+        mTitle = title;
+        mLink = link;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public long getId() {
+        return mId;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        mTitle = title;
+    }
+
+    public String getLink() {
+        return mLink;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
+    }
+
+    @Override
+    public String toString() {
+        return mTitle;
     }
 }

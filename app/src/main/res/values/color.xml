@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="list_item_title">#fff</color>
-    <color name="list_background">#303030</color>
-    <color name="list_background_pressed">#992416</color>
-    <color name="list_divider">#272727</color>
-    <color name="counter_text_bg">#626262</color>
-    <color name="counter_text_color">#c5c4c4</color>
+    <color name="list_item_title">#ffffff</color>
+    <color name="list_background">#1976d2</color>
+    <color name="list_background_pressed">#0288d1</color>
+
+    <!-- divider not used -->
+    <color name="list_divider">#e3f2fd</color>
+
+    <color name="toolbar_background">#1565c0</color>
+
+    <!-- rss item -->
+
+    <color name="rss_item">#000000</color>
+    <color name="rss_item_blue">#0288d1</color>
+
+    <!-- add feed page -->
+
+    <color name="add_feed_text_color">#000000</color>
+    <color name="add_feed_button_text_color">#0288d1</color>
+    <color name="add_feed_button_color">#0288d1</color>
+
+    <color name="add_feed_text_color_highlight">#0288d1</color>
+
 </resources>

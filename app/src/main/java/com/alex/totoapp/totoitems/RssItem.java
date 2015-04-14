@@ -1,67 +1,81 @@
 package com.alex.totoapp.totoitems;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-/**
- * Created by Kylarme on 13.11.2014.
- */
-public class RssItem implements Parcelable {
+public class RssItem implements Serializable {
 
-    private String headline;
-    private String link;
+    private static final long serialVersionUID = -7406082437623008161L;
 
-    @Override
-    public int describeContents() {
-        return 0;
+    private long mId;
+    private String mHeadline;
+    private String mLink;
+    private String mImageLink;
+    private String mDescription;
+    private long mFeedId;
+
+    public RssItem() {
+
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(headline);
-        dest.writeString(link);
+    public RssItem(long id, String headline, String link, String imageLink, String description, int feedId) {
+        mId = id;
+        mHeadline = headline;
+        mLink = link;
+        mImageLink = imageLink;
+        mDescription = description;
+        mFeedId = feedId;
     }
 
-    public RssItem(String headline, String link) {
-        this.headline = headline;
-        this.link = link;
+    public long getId() {
+        return mId;
     }
 
-    private RssItem(Parcel in) {
-        this.headline = in.readString();
-        this.link = in.readString();
+    public void setId(long id) {
+        mId = id;
     }
-
-    public static final Creator<RssItem> CREATOR = new Creator<RssItem>() {
-        @Override
-        public RssItem createFromParcel(Parcel source) {
-            return new RssItem(source);
-        }
-
-        @Override
-        public RssItem[] newArray(int size) {
-            return new RssItem[size];
-        }
-    };
 
     public String getHeadline() {
-        return headline;
+        return mHeadline;
     }
 
     public void setHeadline(String headline) {
-        this.headline = headline;
+        mHeadline = headline;
     }
 
     public String getLink() {
-        return link;
+        return mLink;
     }
 
     public void setLink(String link) {
-        this.link = link;
+        mLink = link;
+    }
+
+    public String getImageLink() {
+        return mImageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        mImageLink = imageLink;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+    }
+
+    public long getFeedId() {
+        return mFeedId;
+    }
+
+    public void setFeedId(long feedId) {
+        mFeedId = feedId;
     }
 
     @Override
     public String toString() {
-        return headline;
+        return mHeadline;
     }
 }

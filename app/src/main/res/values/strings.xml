@@ -7,10 +7,16 @@
 
     <!-- add feed -->
     <string name="action_add_feed">Add feed</string>
-    <string name="add_feed_title">Feed title:</string>
-    <string name="add_feed_url">Feed url:</string>
-    <string name="add_feed_button">Add feed</string>
-    <string name="delete_feed_title">Delete feed by id:</string>
-    <string name="delete_feed_button">Delete</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="add_feed_title">Enter the feed title</string>
+    <string name="add_feed_url">Enter the website or feed link</string>
+
+    <string name="check_link_button">Check</string>
+    <string name="make_feed_button">Make feed</string>
+    <string name="cancel_feed_button">Cancel</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="menu_delete">Delete feed</string>
 
 </resources>

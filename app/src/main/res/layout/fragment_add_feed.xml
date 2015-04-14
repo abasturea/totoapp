@@ -1,133 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme.Base"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:baselineAligned="true"
+    android:orientation="vertical"
+    android:screenOrientation="portrait">
 
     <LinearLayout
+        android:id="@+id/feed_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|left"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/feed_title_text_view"
+            style="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
             android:layout_marginLeft="16dp"
             android:text="@string/add_feed_title"
-            android:textColor="#ff474747"
-            android:textSize="24sp"
-            android:textStyle="bold|normal" />
+            android:textColor="@color/add_feed_text_color"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <EditText
             android:id="@+id/feed_title_edit_text"
+            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
-            android:layout_marginLeft="6dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:inputType="text"
-            android:textColor="#ff474747"
+            android:textColor="@color/add_feed_text_color"
+            android:textColorHighlight="@color/add_feed_text_color_highlight"
+            android:textColorLink="@color/add_feed_text_color_highlight"
             android:textSize="24sp"
             android:textStyle="normal" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/feed_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/feed_title"
         android:layout_gravity="center|left"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="4dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/feed_url_text_view"
+            style="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
             android:layout_marginLeft="16dp"
             android:text="@string/add_feed_url"
-            android:textColor="#ff474747"
-            android:textSize="24sp"
-            android:textStyle="bold|normal" />
-
-        <EditText
-            android:id="@+id/feed_url_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|left"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="16dp"
-            android:inputType="text"
-            android:textColor="#ff474747"
-            android:textSize="24sp"
+            android:textColor="@color/add_feed_text_color"
+            android:textSize="16sp"
             android:textStyle="normal" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|left"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_feed_button"
-            android:id="@+id/add_feed_button"
-            android:layout_gravity="center|top"
-            android:layout_marginLeft="16dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|left"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp" >
-
-        <TextView
-            android:id="@+id/feed_delete_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|left"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
-            android:text="@string/delete_feed_title"
-            android:textColor="#ff474747"
-            android:textSize="24sp"
-            android:textStyle="bold|normal" />
-
-        <EditText
-            android:id="@+id/feed_delete_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|left"
-            android:layout_marginLeft="6dp"
             android:layout_marginRight="16dp"
-            android:inputType="text"
-            android:textColor="#ff474747"
-            android:textSize="24sp"
-            android:textStyle="normal" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/feed_url_edit_text"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textColor="@color/add_feed_text_color"
+                android:textColorHighlight="@color/add_feed_text_color_highlight"
+                android:textColorLink="@color/add_feed_text_color_highlight"
+                android:textSize="22sp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/search_feed_button"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center|right"
+                android:text="@string/check_link_button"
+                android:textColor="@color/add_feed_button_text_color"
+                android:textSize="21sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/searched_feeds_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|left"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp" >
+        android:layout_height="match_parent"
+        android:layout_below="@id/feed_url"
+        android:layout_marginTop="4dp"
+        android:baselineAligned="true"
+        android:gravity="left|bottom"
+        android:orientation="horizontal" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/delete_feed_button"
-            android:id="@+id/delete_feed_button"
-            android:layout_gravity="center|top"
-            android:layout_marginLeft="16dp" />
-    </LinearLayout>
-
-</LinearLayout>
-
+</RelativeLayout>

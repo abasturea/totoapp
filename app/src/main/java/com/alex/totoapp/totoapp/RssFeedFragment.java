@@ -1,47 +1,114 @@
 package com.alex.totoapp.totoapp;
 
-import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.alex.totoapp.R;
 import com.alex.totoapp.totoadapters.RssAdapter;
-import com.alex.totoapp.totoitems.RssItem;
-import com.alex.totoapp.totoloaders.RssLoader;
-
-import java.util.ArrayList;
+import com.alex.totoapp.totoitems.FeedItem;
+import com.alex.totoapp.totoloaders.RssItemsLoader;
 
 public class RssFeedFragment extends Fragment {
 
     private static final String TAG = "RssFeedFragment";
 
-    private static View rootView = null;
-    private static ArrayList<RssItem> rssItems = new ArrayList<RssItem>();
+    private static final int PHONE_SPAN_COUNT = 1;
+    private static final int TABLET_SPAN_COUNT = 2;
 
-    private String urlText = null;
-    private ListView itemsListView = null;
-    private RssAdapter rssAdapter = null;
+    private static FeedItem sFeedItem;
+    private static Loader sRssLoader;
 
-    public RssFeedFragment() {
+    private static View sRootView;
+
+    private static Activity mActivity;
+
+    private static RecyclerView mItemsView;
+
+    private GridLayoutManager mGridLayoutManager;
+    private int mSpanCount;
+
+    private static RssAdapter sRssAdapter;
+    private LoaderManager mLoaderManager;
+
+    public RssFeedFragment() {}
+
+    protected static boolean updateRssItems() {
+
+        if (sRootView == null || sFeedItem == null || sRssLoader == null)
+            return false;
+
+        UpdateRssItemsService.updateRssItems(sFeedItem, new UpdateRssItemsService.ItemUpdateCallback() {
+            @Override
+            public void onItemUpdate(boolean success) {
+                if (success) {
+                    if (sRssLoader != null) {
+                        sRssLoader.startLoading();
+                    }
+                }
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mActivity = getActivity();
+
+        mLoaderManager = getLoaderManager();
+
+        sRssAdapter = new RssAdapter(mActivity);
+
+        mSpanCount = 1;
+
+        setLoader();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
 
-        if(rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_rss_feed, container, false);
-            loadRssItems();
+        if (sRootView == null) {
+            Utils.Device.setScreenOrientation(mActivity, ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
+            sRootView = inflater.inflate(R.layout.fragment_rss_feed, container, false);
+
+            setViewCards();
         }
 
-        return rootView;
+        return sRootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Log.i(TAG, "onStop");
+
+        mLoaderManager.destroyLoader(RssItemsLoader.sLoaderId);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.i(TAG, "onStart");
+
     }
 
     @Override
@@ -50,45 +117,71 @@ public class RssFeedFragment extends Fragment {
 
         Log.i(TAG, "onDestroy");
 
-        if(rootView != null) {
-            rssAdapter.clear();
-            rssAdapter.notifyDataSetChanged();
+        sRssLoader = null;
+        mItemsView = null;
+        sRssAdapter = null;
 
-            urlText = null;
-            itemsListView = null;
-            rssAdapter = null;
+        mLoaderManager.destroyLoader(RssItemsLoader.sLoaderId);
 
-            rootView = null;
-        }
+        mLoaderManager = null;
+
+        sRootView = null;
     }
 
-    private void loadRssItems() {
-        Bundle loaderBundle = getArguments();
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
 
-        urlText = loaderBundle.get(RssLoader.RSS_LINK).toString();
-        itemsListView = (ListView) rootView.findViewById(R.id.listView);
-        rssAdapter = new RssAdapter(getActivity(), android.R.layout.simple_list_item_1, rssItems);
-
-        itemsListView.setAdapter(rssAdapter);
-
-        Log.i(TAG, "Started setting a new list for: " + urlText);
-
-        RssLoader rssLoader = new RssLoader(getActivity(), rssAdapter);
-
-        if (getLoaderManager().getLoader(RssLoader.RSS_LINK_ID) != null) {
-            getLoaderManager().restartLoader(RssLoader.RSS_LINK_ID, loaderBundle, rssLoader);
-        } else {
-            getLoaderManager().initLoader(RssLoader.RSS_LINK_ID, loaderBundle, rssLoader);
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mGridLayoutManager.setSpanCount(mSpanCount);
         }
 
-        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "Clicked on position:" + position);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mGridLayoutManager.setSpanCount(mSpanCount + 1);
+        }
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(rssItems.get(position).getLink()));
-                startActivity(browserIntent);
-            }
-        });
+        mItemsView.setLayoutManager(mGridLayoutManager);
+    }
+
+    private void setViewCards() {
+
+        mItemsView = (RecyclerView) sRootView.findViewById(R.id.rss_feed_view);
+        mItemsView.setHasFixedSize(true);
+        mItemsView.setAdapter(sRssAdapter);
+
+        if (Utils.Device.getDeviceType(mActivity) == Utils.Device.PHONE) {
+            mSpanCount = PHONE_SPAN_COUNT;
+        } else {
+            mSpanCount = TABLET_SPAN_COUNT;
+        }
+
+        if (Utils.Device.getDeviceScreenOrientation(mActivity) == Configuration.ORIENTATION_LANDSCAPE) {
+            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount + 1);
+        } else {
+            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount);
+        }
+
+        mGridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mItemsView.setLayoutManager(mGridLayoutManager);
+    }
+
+    private void setLoader() {
+
+        Bundle loaderBundle = getArguments();
+
+        sFeedItem = (FeedItem) loaderBundle.get(RssItemsLoader.RSS_FEED_ITEM);
+
+        Log.i(TAG, "Started setting a new list for: " + sFeedItem);
+
+        RssItemsLoader rssItemsLoader = new RssItemsLoader(mActivity, sRssAdapter);
+
+        mLoaderManager.initLoader(RssItemsLoader.sLoaderId, loaderBundle, rssItemsLoader);
+        sRssLoader = mLoaderManager.getLoader(RssItemsLoader.sLoaderId);
+
+        if (sRssLoader != null) {
+            sRssLoader.startLoading();
+        }
     }
 }
