@@ -1,6 +1,6 @@
-package com.alex.totoapp.totoparsers;
+package com.github.kylarme.totoapp.totoparsers;
 
-import com.alex.totoapp.totoitems.FeedLinkItem;
+import com.github.kylarme.totoapp.totoitems.FeedLinkItem;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.alex.totoapp">
+    package="com.github.kylarme.totoapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.alex.totoapp.totoapp.MainActivity"
+            android:name="com.github.kylarme.totoapp.totoapp.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
@@ -24,27 +24,27 @@
         </activity>
 
         <activity
-            android:name="com.alex.totoapp.totoapp.DetailedRssActivity"
+            android:name="com.github.kylarme.totoapp.totoapp.DetailedRssActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.alex.totoapp.totoapp.SettingsActivity"
+            android:name="com.github.kylarme.totoapp.totoapp.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name="com.alex.totoapp.totoapp.UpdateRssItemsService"
+            android:name="com.github.kylarme.totoapp.totoapp.UpdateRssItemsService"
             android:enabled="true"
             android:exported="false" />
 
         <provider
-            android:name="com.alex.totoapp.totoproviders.FeedContentProvider"
-            android:authorities="com.alex.totoapp"
+            android:name="com.github.kylarme.totoapp.totoproviders.FeedContentProvider"
+            android:authorities="com.github.kylarme.totoapp"
             android:exported="false" />
 
     </application>

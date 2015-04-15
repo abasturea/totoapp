@@ -4,7 +4,7 @@ android {
     compileSdkVersion 22
     buildToolsVersion '22.0.1'
     defaultConfig {
-        applicationId "com.alex.totoapp"
+        applicationId "com.github.kylarme.totoapp"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
