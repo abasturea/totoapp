@@ -1,9 +1,11 @@
 package com.github.kylarme.totoapp.totoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,6 +23,8 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
 
     private RssItem mRssItem;
     private String mLink;
+
+    private boolean mShowImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,10 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
             mRssItem = rssItemsHandler.getRssItem(rssItemId);
         }
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(DetailedRssActivity.this);
+
+        mShowImage = sharedPreferences.getBoolean("showImage", true);
+
         if (mRssItem != null) {
             final String title = mRssItem.getHeadline();
 
@@ -54,7 +62,9 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
             TextView titleView = (TextView) findViewById(R.id.detailed_title);
             TextView descriptionView = (TextView) findViewById(R.id.detailed_description);
 
-            loadImage();
+            if (mShowImage) {
+                loadImage();
+            }
 
             titleView.setText(title);
 
@@ -68,7 +78,9 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        loadImage();
+        if (mShowImage) {
+            loadImage();
+        }
     }
 
     @Override

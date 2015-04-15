@@ -3,6 +3,8 @@ package com.github.kylarme.totoapp.totoadapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.github.kylarme.totoapp.R;
 import com.github.kylarme.totoapp.totoapp.DetailedRssActivity;
+import com.github.kylarme.totoapp.totoapp.PreferenceFragment;
 import com.github.kylarme.totoapp.totoitems.RssItem;
 import com.squareup.picasso.Picasso;
 
@@ -23,16 +26,18 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
     public static final String RSS_ITEM_ID = "rss_item_id";
 
     private final Context mActivity;
+
+    private final boolean mShowImage;
+
     private List<RssItem> mRssItemsList;
 
     public RssAdapter(Activity activity) {
         mActivity = activity;
         mRssItemsList = new ArrayList<RssItem>();
-    }
 
-    public RssAdapter(Activity activity, List<RssItem> rssItemsList) {
-        mActivity = activity;
-        mRssItemsList = rssItemsList;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
+
+        mShowImage = sharedPreferences.getBoolean("showImage", true);
     }
 
     @Override
@@ -48,10 +53,12 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
         rssItems.mTitle.setText(rssItem.getHeadline());
         rssItems.mImage.setImageDrawable(null);
 
-        String imageLink = rssItem.getImageLink();
+        if (mShowImage) {
+            String imageLink = rssItem.getImageLink();
 
-        if (!imageLink.equals("")) {
-            Picasso.with(mActivity).load(imageLink).resize(650, 350).centerInside().into(rssItems.mImage);
+            if (!imageLink.equals("")) {
+                Picasso.with(mActivity).load(imageLink).resize(650, 350).centerInside().into(rssItems.mImage);
+            }
         }
 
         rssItems.setOnClickListener(new RssItemViewHolder.OnCardClickListener() {

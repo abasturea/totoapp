@@ -4,6 +4,7 @@
 
     <!-- settings -->
     <string name="action_settings">Settings</string>
+    <string name="pref_showImage">showImage</string>
 
     <!-- add feed -->
     <string name="action_add_feed">Add feed</string>

@@ -98,9 +98,6 @@ public class RssFeedFragment extends Fragment {
         super.onStop();
 
         Log.i(TAG, "onStop");
-
-//        mLoaderManager.destroyLoader(RssItemsLoader.sLoaderId);
-
     }
 
     @Override
@@ -108,7 +105,6 @@ public class RssFeedFragment extends Fragment {
         super.onStart();
 
         Log.i(TAG, "onStart");
-
     }
 
     @Override
