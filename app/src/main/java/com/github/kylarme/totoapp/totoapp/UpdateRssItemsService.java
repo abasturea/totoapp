@@ -52,11 +52,7 @@ public class UpdateRssItemsService extends Service {
                 }
             });
 
-            try {
-                sScheduledExecutorService.wait(WAIT_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            //TODO: set wait time
         }
     }
 

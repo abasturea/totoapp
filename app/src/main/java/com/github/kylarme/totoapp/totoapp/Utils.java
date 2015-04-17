@@ -77,34 +77,36 @@ public final class Utils {
          * @return the device type.
          */
         public static int getDeviceType(Activity activity) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-            if (metrics.densityDpi <= DisplayMetrics.DENSITY_LOW) {
+            // TODO: change returned values to correspond the Configuration
 
-                return PHONE;
+            int screen = activity.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+            switch (screen) {
+                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED: {
+                    return PHONE;
+                }
+
+                case Configuration.SCREENLAYOUT_SIZE_SMALL: {
+                    return PHONE;
+                }
+
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL: {
+                    return PHONE;
+                }
+
+                case Configuration.SCREENLAYOUT_SIZE_LARGE: {
+                    return TABLET;
+                }
+
+                case Configuration.SCREENLAYOUT_SIZE_XLARGE: {
+                    return TABLET;
+                }
+                default: {
+                    return PHONE;
+                }
             }
-
-            if (metrics.densityDpi >= DisplayMetrics.DENSITY_LOW &&
-                    metrics.densityDpi <= DisplayMetrics.DENSITY_MEDIUM) {
-
-                return PHONE;
-            }
-
-            if (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM &&
-                    metrics.densityDpi <= DisplayMetrics.DENSITY_HIGH) {
-
-                return TABLET;
-            }
-
-            if (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM) {
-
-                return TABLET;
-            }
-
-            return PHONE;
         }
-
 
         /**
          * Sets the screen orientation mode.
