@@ -5,6 +5,7 @@
         android:id="@+id/showImage"
         android:defaultValue="true"
         android:key="@string/pref_showImage"
+        android:textColor="@color/settings_text_color"
         android:summary="Determine if the app loads images."
         android:title="Show feed image: " />
 

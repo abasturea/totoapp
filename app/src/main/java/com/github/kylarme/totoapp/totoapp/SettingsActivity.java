@@ -1,12 +1,14 @@
 package com.github.kylarme.totoapp.totoapp;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.github.kylarme.totoapp.R;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends ActionBarActivity {
 
     private static final String TAG = "SettingsActivity";
 
@@ -17,5 +19,22 @@ public class SettingsActivity extends Activity {
         Log.i(TAG, "onCreate");
 
         setContentView(R.layout.fragment_settings);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
