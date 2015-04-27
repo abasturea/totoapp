@@ -16,13 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class UpdateRssItemsService extends Service {
 
-    private final static int UPDATE_TIME = 1 * 60 * 1000;
-    private final static int WAIT_TIME = 1000;
-    private final static int THREAD_POOL_COUNT = 5;
+    private final static int THREAD_POOL_COUNT = 2;
 
     private static RssItemsHandler sRssItemsHandler;
     private static FeedItemsHandler sFeedItemsHandler;
@@ -31,12 +30,30 @@ public class UpdateRssItemsService extends Service {
 
     private static Context sContext;
 
+    private static ScheduledFuture<?> sFutureTask;
+
+    private static int sUpdateTime;
+    private static Runnable sUpdateRunnable;
+
     public static void updateRssItems(final FeedItem feedItem, final ItemUpdateCallback onUpdateItem) {
 
         if (sScheduledExecutorService != null) {
             if (Utils.isNetworkAvailable(sContext)) {
                 sScheduledExecutorService.execute(new UpdateRssItem(feedItem, onUpdateItem));
             }
+        }
+    }
+
+    public static void setUpdateTime(final int updateTime) {
+
+        if (updateTime != -1) {
+            sUpdateTime = updateTime;
+        }
+
+        if (sFutureTask != null) {
+            sFutureTask.cancel(false);
+
+            sFutureTask = sScheduledExecutorService.scheduleAtFixedRate(sUpdateRunnable, 0, sUpdateTime, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -62,17 +79,21 @@ public class UpdateRssItemsService extends Service {
 
         sContext = getApplicationContext();
 
+        sUpdateTime = Utils.UpdateService.getCurrentUpdateTime(sContext);
+
         sScheduledExecutorService = Executors.newScheduledThreadPool(THREAD_POOL_COUNT);
 
         sRssItemsHandler = new RssItemsHandler(this);
         sFeedItemsHandler = new FeedItemsHandler(this);
 
-        sScheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        sUpdateRunnable = new Runnable() {
             @Override
             public void run() {
                 updateAllRssItems();
             }
-        }, 0, UPDATE_TIME, TimeUnit.MILLISECONDS);
+        };
+
+        sFutureTask = sScheduledExecutorService.scheduleAtFixedRate(sUpdateRunnable, 0, sUpdateTime, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -84,7 +105,7 @@ public class UpdateRssItemsService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        sScheduledExecutorService.shutdown();
+//        stopExecutorService();
     }
 
     @Override
@@ -112,7 +133,7 @@ public class UpdateRssItemsService extends Service {
                     @Override
                     public void OnRetrieve(ArrayList<RssItem> rssItems) {
 
-                        if(!rssItems.isEmpty()){
+                        if (!rssItems.isEmpty()) {
                             Log.i("UpdateRssItemsService", "Update feed item: " + mFeedItem.getTitle());
 
                             sRssItemsHandler.deleteRssItems(mFeedItem.getId());

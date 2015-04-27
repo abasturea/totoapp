@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.github.kylarme.totoapp.R;
 import com.github.kylarme.totoapp.totoapp.DetailedRssActivity;
-import com.github.kylarme.totoapp.totoapp.PreferenceFragment;
 import com.github.kylarme.totoapp.totoitems.RssItem;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +36,9 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
-        mShowImage = sharedPreferences.getBoolean("showImage", true);
+        String showImagePref = mActivity.getResources().getString(R.string.pref_show_image);
+
+        mShowImage = sharedPreferences.getBoolean(showImagePref, true);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.github.kylarme.totoapp.totoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,8 +21,6 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
 
-    private Intent updateRssItemsService;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +31,24 @@ public class MainActivity extends ActionBarActivity {
 
         Utils.Device.setScreenOrientation(this, ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-        updateRssItemsService = new Intent(this, UpdateRssItemsService.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        startService(updateRssItemsService);
+        String autoRefreshPref = getResources().getString(R.string.pref_auto_refresh);
+
+        boolean autoRefresh = sharedPreferences.getBoolean(autoRefreshPref, true);
+
+        if (autoRefresh) {
+
+            int serviceStatus = Utils.UpdateService
+                    .getServiceStatus(MainActivity.this, UpdateRssItemsService.class);
+
+            if (serviceStatus == Utils.UpdateService.STOPPED) {
+
+                Intent updateRssItemsService = new Intent(this, UpdateRssItemsService.class);
+
+                startService(updateRssItemsService);
+            }
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
 
@@ -45,13 +60,6 @@ public class MainActivity extends ActionBarActivity {
                 .findFragmentById(R.layout.fragment_navigation_drawer);
 
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        updateRssItemsService = null;
     }
 
     @Override

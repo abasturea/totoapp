@@ -9,12 +9,10 @@
     <color name="toolbar_background">#1565c0</color>
 
     <!-- rss item -->
-
     <color name="rss_item">#000000</color>
     <color name="rss_item_blue">#0288d1</color>
 
     <!-- add feed page -->
-
     <color name="add_feed_text_color">#000000</color>
     <color name="add_feed_button_text_color">#0288d1</color>
     <color name="add_feed_button_color">#0288d1</color>
@@ -23,5 +21,4 @@
 
     <!-- settings page -->
     <color name="settings_text_color">#000000</color>
-
 </resources>

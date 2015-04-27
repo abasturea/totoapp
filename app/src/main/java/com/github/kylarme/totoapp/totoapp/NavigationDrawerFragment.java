@@ -25,12 +25,13 @@ import com.github.kylarme.totoapp.R;
 import com.github.kylarme.totoapp.totoadapters.FeedAdapter;
 import com.github.kylarme.totoapp.totoitems.FeedItem;
 import com.github.kylarme.totoapp.totoloaders.FeedItemsLoader;
-import com.github.kylarme.totoapp.totoloaders.RssItemsLoader;
 import com.github.kylarme.totoapp.totoproviders.FeedItemsHandler;
 
 import java.util.ArrayList;
 
 public class NavigationDrawerFragment extends Fragment {
+
+    protected static final String RSS_FEED_ITEM = "rss_feed_item";
 
     private static final String TAG = "NavDrawerFragment";
 
@@ -47,7 +48,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     private FeedItemsHandler mFeedHandler = null;
 
-    public NavigationDrawerFragment() {}
+    public NavigationDrawerFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,7 +164,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             FeedItem feedItem = mFeedItems.get(position);
 
-            fragmentArgs.putSerializable(RssItemsLoader.RSS_FEED_ITEM, feedItem);
+            fragmentArgs.putSerializable(RSS_FEED_ITEM, feedItem);
             fragment.setArguments(fragmentArgs);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commitAllowingStateLoss();

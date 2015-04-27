@@ -3,10 +3,9 @@ package com.github.kylarme.totoapp.totoapp;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,10 @@ import android.view.ViewGroup;
 import com.github.kylarme.totoapp.R;
 import com.github.kylarme.totoapp.totoadapters.RssAdapter;
 import com.github.kylarme.totoapp.totoitems.FeedItem;
-import com.github.kylarme.totoapp.totoloaders.RssItemsLoader;
+import com.github.kylarme.totoapp.totoitems.RssItem;
+import com.github.kylarme.totoapp.totoproviders.RssItemsHandler;
+
+import java.util.ArrayList;
 
 public class RssFeedFragment extends Fragment {
 
@@ -28,7 +30,6 @@ public class RssFeedFragment extends Fragment {
     private static final int TABLET_SPAN_COUNT = 2;
 
     private static FeedItem sFeedItem;
-    private static Loader sRssLoader;
 
     private static View sRootView;
 
@@ -40,22 +41,22 @@ public class RssFeedFragment extends Fragment {
     private int mSpanCount;
 
     private static RssAdapter sRssAdapter;
-    private LoaderManager mLoaderManager;
 
-    public RssFeedFragment() {}
+    private static RssItemsHandler sRssItemsHandler;
+
+    public RssFeedFragment() {
+    }
 
     protected static boolean updateRssItems() {
 
-        if (sRootView == null || sFeedItem == null || sRssLoader == null)
+        if (sRootView == null || sFeedItem == null)
             return false;
 
         UpdateRssItemsService.updateRssItems(sFeedItem, new UpdateRssItemsService.ItemUpdateCallback() {
             @Override
             public void onItemUpdate(boolean success) {
                 if (success) {
-                    if (sRssLoader != null) {
-                        sRssLoader.startLoading();
-                    }
+                    new LoadItemsTask().execute(sFeedItem);
                 }
             }
         });
@@ -69,13 +70,14 @@ public class RssFeedFragment extends Fragment {
 
         mActivity = getActivity();
 
-        mLoaderManager = getLoaderManager();
-
+        sRssItemsHandler = new RssItemsHandler(mActivity);
         sRssAdapter = new RssAdapter(mActivity);
 
         mSpanCount = 1;
 
-        setLoader();
+        Bundle loaderBundle = getArguments();
+
+        sFeedItem = (FeedItem) loaderBundle.get(NavigationDrawerFragment.RSS_FEED_ITEM);
     }
 
     @Override
@@ -88,6 +90,8 @@ public class RssFeedFragment extends Fragment {
             sRootView = inflater.inflate(R.layout.fragment_rss_feed, container, false);
 
             setViewCards();
+
+            new LoadItemsTask().execute(sFeedItem);
         }
 
         return sRootView;
@@ -113,13 +117,8 @@ public class RssFeedFragment extends Fragment {
 
         Log.i(TAG, "onDestroy");
 
-        sRssLoader = null;
         mItemsView = null;
         sRssAdapter = null;
-
-        mLoaderManager.destroyLoader(RssItemsLoader.sLoaderId);
-
-        mLoaderManager = null;
 
         sRootView = null;
     }
@@ -163,21 +162,38 @@ public class RssFeedFragment extends Fragment {
         mItemsView.setLayoutManager(mGridLayoutManager);
     }
 
-    private void setLoader() {
+    private static class LoadItemsTask extends AsyncTask<FeedItem, Void, Boolean> {
+        ArrayList<RssItem> rssItems;
 
-        Bundle loaderBundle = getArguments();
+        @Override
+        protected Boolean doInBackground(FeedItem... params) {
 
-        sFeedItem = (FeedItem) loaderBundle.get(RssItemsLoader.RSS_FEED_ITEM);
+            long feedItemId = params[0].getId();
 
-        Log.i(TAG, "Started setting a new list for: " + sFeedItem);
+            Log.i(TAG, "Started setting a new list for: " + sFeedItem);
 
-        RssItemsLoader rssItemsLoader = new RssItemsLoader(mActivity, sRssAdapter);
+            rssItems = sRssItemsHandler.getRssItems(feedItemId);
 
-        mLoaderManager.initLoader(RssItemsLoader.sLoaderId, loaderBundle, rssItemsLoader);
-        sRssLoader = mLoaderManager.getLoader(RssItemsLoader.sLoaderId);
+            if (rssItems == null) {
+                return false;
+            }
 
-        if (sRssLoader != null) {
-            sRssLoader.startLoading();
+            if (rssItems.isEmpty()) {
+                Log.w(TAG, "There are no rss items...");
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            if(aBoolean){
+                mItemsView.invalidate();
+                sRssAdapter.setData(rssItems);
+            }
         }
     }
 }

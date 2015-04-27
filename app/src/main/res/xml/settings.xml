@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:id="@+id/showImage"
-        android:defaultValue="true"
-        android:key="@string/pref_showImage"
-        android:textColor="@color/settings_text_color"
-        android:summary="Determine if the app loads images."
-        android:title="Show feed image: " />
+    <PreferenceCategory android:title="Image Settings">
+        <SwitchPreference
+            android:id="@+id/showImage"
+            android:defaultValue="@string/pref_show_image_default"
+            android:key="@string/pref_show_image"
+            android:summary="@string/pref_show_image_summary"
+            android:title="@string/pref_show_image_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Refresh Settings">
+        <SwitchPreference
+            android:id="@+id/autoRefresh"
+            android:defaultValue="@string/pref_auto_refresh_default"
+            android:key="@string/pref_auto_refresh"
+            android:summary="@string/pref_auto_refresh_summary"
+            android:title="@string/pref_auto_refresh_title" />
+
+        <ListPreference
+            android:id="@+id/refreshRate"
+            android:defaultValue="@string/pref_refresh_rate_default"
+            android:entries="@array/pref_refresh_rate_elements"
+            android:entryValues="@array/pref_refresh_rate_elements_values"
+            android:key="@string/pref_refresh_rate"
+            android:summary="@string/pref_refresh_rate_summary"
+            android:title="@string/pref_refresh_rate_title" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,14 +1,19 @@
 package com.github.kylarme.totoapp.totoapp;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.github.kylarme.totoapp.R;
 
 public final class Utils {
 
@@ -58,6 +63,105 @@ public final class Utils {
         sToastMessage.show();
     }
 
+    /**
+     *
+     */
+    public static class UpdateService {
+
+        /**
+         *
+         */
+        public static final int STOPPED = 0;
+
+        /**
+         *
+         */
+        public static final int RUNNING = 1;
+
+        /**
+         *
+         */
+        public static final int UPDATE_TIME_15_MINUTES = 15 * 60 * 1000;
+
+        /**
+         *
+         */
+        public static final int UPDATE_TIME_30_MINUTES = 30 * 60 * 1000;
+
+        /**
+         *
+         */
+        public static final int UPDATE_TIME_60_MINUTES = 1 * 60 * 60 * 1000;
+
+        /**
+         *
+         */
+        public static final int UPDATE_TIME_180_MINUTES = 3 * 60 * 60 * 1000;
+
+        /**
+         * @param activity
+         * @param serviceClass
+         * @return
+         */
+        public static int getServiceStatus(Activity activity, Class<?> serviceClass) {
+            ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+
+                    return RUNNING;
+                }
+            }
+
+            return STOPPED;
+        }
+
+        /**
+         * @param context
+         * @return
+         */
+        public static int getCurrentUpdateTime(Context context) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+            String refreshRatePref = context.getResources().getString(R.string.pref_refresh_rate);
+
+            String updateTime = sharedPreferences.getString(refreshRatePref, null);
+
+            return mapUpdateTime(context, updateTime);
+        }
+
+        /**
+         * @param context
+         * @param updateTime
+         * @return
+         */
+        public static int mapUpdateTime(Context context, String updateTime) {
+
+            if (updateTime == null) {
+                return -1;
+            }
+
+            String[] time = context.getResources().getStringArray(R.array.pref_refresh_rate_elements_values);
+
+            if (updateTime.equals(time[0]))
+                return UPDATE_TIME_15_MINUTES;
+
+            if (updateTime.equals(time[1]))
+                return UPDATE_TIME_30_MINUTES;
+
+            if (updateTime.equals(time[2]))
+                return UPDATE_TIME_60_MINUTES;
+
+            if (updateTime.equals(time[3]))
+                return UPDATE_TIME_180_MINUTES;
+
+            return -1;
+        }
+    }
+
+    /**
+     *
+     */
     public static class Device {
 
         /**
@@ -140,3 +244,4 @@ public final class Utils {
         }
     }
 }
+

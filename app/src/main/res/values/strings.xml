@@ -4,7 +4,38 @@
 
     <!-- settings -->
     <string name="action_settings">Settings</string>
-    <string name="pref_showImage">showImage</string>
+
+    <!-- show image pref -->
+    <string name="pref_show_image">show_image</string>
+    <string name="pref_show_image_default">true</string>
+    <string name="pref_show_image_summary">Determine if the app loads images.</string>
+    <string name="pref_show_image_title">Show feed images </string>
+
+    <!-- auto refresh pref -->
+    <string name="pref_auto_refresh">auto_refresh</string>
+    <string name="pref_auto_refresh_default">true</string>
+    <string name="pref_auto_refresh_summary">Determine if the app auto refreshes feeds.</string>
+    <string name="pref_auto_refresh_title">Auto refresh feeds</string>
+
+    <!-- refresh pref -->
+    <string name="pref_refresh_rate">refresh_rate</string>
+    <string name="pref_refresh_rate_default">60</string>
+    <string name="pref_refresh_rate_summary">Determine feeds refresh rate.</string>
+    <string name="pref_refresh_rate_title">Feed refresh rate</string>
+
+    <string-array name="pref_refresh_rate_elements">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+    </string-array>
+
+    <string-array name="pref_refresh_rate_elements_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+    </string-array>
 
     <!-- add feed -->
     <string name="action_add_feed">Add feed</string>
