@@ -125,7 +125,7 @@ public final class Utils {
 
             String refreshRatePref = context.getResources().getString(R.string.pref_refresh_rate);
 
-            String updateTime = sharedPreferences.getString(refreshRatePref, null);
+            String updateTime = sharedPreferences.getString(refreshRatePref, "60");
 
             return mapUpdateTime(context, updateTime);
         }
