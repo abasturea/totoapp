@@ -11,6 +11,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RssParser {
 
@@ -147,23 +149,50 @@ public class RssParser {
 
     private String getDescription(Element element) {
 
-        String description;
+        Elements description;
 
-        description = element.select("description").text();
+        StringBuilder buffer = new StringBuilder();
 
-        if (isEmpty(description)) {
-            description = element.select("content").text();
+        description = element.select("description");
+
+        if (description.size() == 0) {
+            description = element.select("content");
         }
 
-        if (!description.equals("")) {
-            description = formatDescription(description);
-            description = removeTags(description);
+        Elements descElements = description.select("p");
+
+        if (descElements.size() == 0) {
+            buffer.append("   ").append(description.text()).append("\n\n");
+        }
+
+        for (Element el : descElements) {
+            el.select("a").remove();
+
+            buffer.append("   ").append(el.text()).append("\n\n");
+        }
+
+        return buffer.toString();
+    }
+
+    private String formatDescription(String description) {
+
+        // the pattern we want to search for
+        Pattern p = Pattern.compile("(?i)(<p.*?>)(.+?)(</p>)");
+        Matcher m = p.matcher(description);
+
+        // if we find a match, get the group
+        if (m.find()) {
+            // get the matching group
+            String codeGroup = m.group(1);
+
+            // print the group
+            System.out.format("'%s'\n", codeGroup);
         }
 
         return description;
     }
 
-    private String formatDescription(String description) {
+/*    private String formatDescription(String description) {
 
         int count = 0;
         StringBuilder buffer = new StringBuilder();
@@ -205,7 +234,7 @@ public class RssParser {
         }
 
         return buffer.toString();
-    }
+    }*/
 
     private String removeTags(String description) {
 
@@ -227,6 +256,7 @@ public class RssParser {
         xml = xml.replaceAll("&gt;", ">");
         xml = xml.replaceAll("&amp;", "&");
         xml = xml.replaceAll("&quot;", "\"");
+        xml = xml.replaceAll("&nbsp;", " ");
 
         return xml;
     }
@@ -237,6 +267,6 @@ public class RssParser {
     }
 
     public interface OnRetrieveListener {
-        public void OnRetrieve(ArrayList<RssItem> rssItems);
+        void OnRetrieve(ArrayList<RssItem> rssItems);
     }
 }

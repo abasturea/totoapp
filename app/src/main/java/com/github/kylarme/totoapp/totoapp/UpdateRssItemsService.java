@@ -156,6 +156,6 @@ public class UpdateRssItemsService extends Service {
     }
 
     public interface ItemUpdateCallback {
-        public void onItemUpdate(boolean success);
+        void onItemUpdate(boolean success);
     }
 }

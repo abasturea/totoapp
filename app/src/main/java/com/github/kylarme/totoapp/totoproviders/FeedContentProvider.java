@@ -75,7 +75,10 @@ public class FeedContentProvider extends ContentProvider implements BaseColumns 
                     RSS_ITEM_URL + " TEXT NOT NULL, " +
                     RSS_ITEM_IMAGE_LINK + " TEXT, " +
                     RSS_ITEM_DESCRIPTION + " TEXT, " +
-                    RSS_ITEM_FEED_ID + " INTEGER " + ");";
+                    RSS_ITEM_FEED_ID + " INTEGER, " +
+
+                    " FOREIGN KEY ( " + RSS_ITEM_FEED_ID + ")" + " REFERENCES " +
+                    FEED_ITEMS_TABLE_NAME + "(" + _ID + ")" + ");";
 
     /**
      * Helper class that actually creates and manages
