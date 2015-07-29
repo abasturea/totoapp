@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,7 +49,9 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(DetailedRssActivity.this);
 
-        mShowImage = sharedPreferences.getBoolean("showImage", true);
+        String showImagePref = getResources().getString(R.string.pref_show_image);
+
+        mShowImage = sharedPreferences.getBoolean(showImagePref, true);
 
         if (mRssItem != null) {
             final String title = mRssItem.getHeadline();
@@ -68,7 +71,7 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
 
             titleView.setText(title);
 
-            descriptionView.setText(description);
+            descriptionView.setText(Html.fromHtml(description));
 
             titleView.setOnClickListener(this);
         }
@@ -104,26 +107,36 @@ public class DetailedRssActivity extends ActionBarActivity implements View.OnCli
         final String imageLink = mRssItem.getImageLink();
         ImageView imageView = (ImageView) findViewById(R.id.detailed_image);
 
-        int orientation = Utils.Device.getDeviceScreenOrientation(DetailedRssActivity.this);
-        int device = Utils.Device.getDeviceType(DetailedRssActivity.this);
+//        int orientation = Utils.Device.getDeviceScreenOrientation(DetailedRssActivity.this);
+//        int device = Utils.Device.getDeviceType(DetailedRssActivity.this);
 
-        if (device == Utils.Device.PHONE) {
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                if (!imageLink.equals("")) {
-                    Picasso.with(DetailedRssActivity.this).load(imageLink).resize(1100, 500).centerCrop().into(imageView);
-                }
-            } else {
-                if (!imageLink.equals("")) {
-                    Picasso.with(DetailedRssActivity.this).load(imageLink).resize(650, 350).centerCrop().into(imageView);
-                }
-            }
+        if (!imageLink.equals("")) {
+            Picasso.with(DetailedRssActivity.this).load(imageLink).into(imageView);
         }
 
-        if (device == Utils.Device.TABLET) {
-            if (!imageLink.equals("")) {
-                Picasso.with(DetailedRssActivity.this).load(imageLink).resize(1100, 500).centerCrop().into(imageView);
-            }
-        }
+//        if (device == Utils.Device.PHONE) {
+//            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                if (!imageLink.equals("")) {
+////                    imageView.setMaxHeight(350);
+//                    Picasso.with(DetailedRssActivity.this).load(imageLink).into(imageView);
+////                    Picasso.with(DetailedRssActivity.this).load(imageLink).resize(1100, 500).centerCrop().into(imageView);
+//                }
+//            } else {
+//                if (!imageLink.equals("")) {
+////                    imageView.setMaxHeight(250);
+//                    Picasso.with(DetailedRssActivity.this).load(imageLink).into(imageView);
+////                    Picasso.with(DetailedRssActivity.this).load(imageLink).resize(650, 350).centerCrop().into(imageView);
+//                }
+//            }
+//        }
+//
+//        if (device == Utils.Device.TABLET) {
+//            if (!imageLink.equals("")) {
+////                imageView.setMaxHeight(350);
+//                Picasso.with(DetailedRssActivity.this).load(imageLink).into(imageView);
+////                Picasso.with(DetailedRssActivity.this).load(imageLink).resize(1100, 500).centerCrop().into(imageView);
+//            }
+//        }
 
         imageView.setOnClickListener(this);
     }

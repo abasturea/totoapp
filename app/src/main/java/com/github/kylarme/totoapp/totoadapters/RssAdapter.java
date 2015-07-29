@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolder> {
 
     public static final String RSS_ITEM_ID = "rss_item_id";
@@ -30,6 +33,8 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
 
     private List<RssItem> mRssItemsList;
 
+    private Handler mHandler;
+
     public RssAdapter(Activity activity) {
         mActivity = activity;
         mRssItemsList = new ArrayList<RssItem>();
@@ -37,6 +42,8 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
 
         String showImagePref = mActivity.getResources().getString(R.string.pref_show_image);
+
+        mHandler = new Handler();
 
         mShowImage = sharedPreferences.getBoolean(showImagePref, true);
     }
@@ -49,17 +56,23 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RssItemViewHolder rssItems, int i) {
+    public void onBindViewHolder(final RssItemViewHolder rssItems, int i) {
         final RssItem rssItem = mRssItemsList.get(i);
-        rssItems.mTitle.setText(rssItem.getHeadline());
+
+        // clear the old values
+        rssItems.mTitle.setText(null);
         rssItems.mImage.setImageDrawable(null);
+        rssItems.mDesciption.setText(null);
 
-        if (mShowImage) {
-            String imageLink = rssItem.getImageLink();
+        rssItems.mTitle.setText(rssItem.getHeadline());
 
-            if (!imageLink.equals("")) {
-                Picasso.with(mActivity).load(imageLink).resize(650, 350).centerInside().into(rssItems.mImage);
-            }
+        final String imageLink = rssItem.getImageLink();
+
+        if (mShowImage && !imageLink.equals("")) {
+//            Picasso.with(mActivity).load(imageLink).resize(700, 350).centerInside().into(rssItems.mImage);
+            Picasso.with(mActivity).load(imageLink).into(rssItems.mImage);
+        } else {
+            rssItems.mDesciption.setText(Html.fromHtml(rssItem.getDescription()));
         }
 
         rssItems.setOnClickListener(new RssItemViewHolder.OnCardClickListener() {
@@ -136,6 +149,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
 
         protected TextView mTitle = null;
         protected ImageView mImage = null;
+        protected TextView mDesciption = null;
 
         protected OnCardClickListener mListener;
 
@@ -146,6 +160,7 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
 
             mTitle = (TextView) itemView.findViewById(R.id.rss_item_title);
             mImage = (ImageView) itemView.findViewById(R.id.rss_item_image);
+            mDesciption = (TextView) itemView.findViewById(R.id.rss_item_description);
         }
 
         public void setOnClickListener(OnCardClickListener listener) {
@@ -159,8 +174,8 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssItemViewHolde
             mListener.onCardClick();
         }
 
-        public static interface OnCardClickListener {
-            public void onCardClick();
+        public interface OnCardClickListener {
+            void onCardClick();
         }
     }
 }

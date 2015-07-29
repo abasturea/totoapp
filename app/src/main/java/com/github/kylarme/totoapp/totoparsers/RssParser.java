@@ -1,5 +1,7 @@
 package com.github.kylarme.totoapp.totoparsers;
 
+import android.util.Log;
+
 import com.github.kylarme.totoapp.totoitems.FeedItem;
 import com.github.kylarme.totoapp.totoitems.RssItem;
 
@@ -151,28 +153,45 @@ public class RssParser {
 
         Elements description;
 
-        StringBuilder buffer = new StringBuilder();
-
         description = element.select("description");
 
         if (description.size() == 0) {
             description = element.select("content");
         }
 
-        Elements descElements = description.select("p");
+        description.select("a.href,script,img,image,iframe").remove();
 
-        if (descElements.size() == 0) {
-            buffer.append("   ").append(description.text()).append("\n\n");
-        }
+        Log.i("RssParser", description.html());
 
-        for (Element el : descElements) {
-            el.select("a").remove();
-
-            buffer.append("   ").append(el.text()).append("\n\n");
-        }
-
-        return buffer.toString();
+        return description.html();
     }
+
+//    private String getDescription(Element element) {
+//
+//        Elements description;
+//
+//        StringBuilder buffer = new StringBuilder();
+//
+//        description = element.select("description");
+//
+//        if (description.size() == 0) {
+//            description = element.select("content");
+//        }
+//
+//        Elements descElements = description.select("p");
+//
+//        if (descElements.size() == 0) {
+//            buffer.append("   ").append(description.text()).append("\n\n");
+//        }
+//
+//        for (Element el : descElements) {
+//            el.select("a").remove();
+//
+//            buffer.append("   ").append(el.text()).append("\n\n");
+//        }
+//
+//        return buffer.toString();
+//    }
 
     private String formatDescription(String description) {
 

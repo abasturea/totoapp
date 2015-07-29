@@ -1,6 +1,26 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+     <!--Default screen margins, per the Android Design guidelines.-->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
     <dimen name="nav_drawer_width">280dp</dimen>
+
+    <dimen name="card_view_rss_item_height">280dp</dimen>
+
+    <dimen name="card_view_rss_item_image_height">200dp</dimen>
+    <dimen name="card_view_rss_item_image_padding_start">3.8dp</dimen>
+    <dimen name="card_view_rss_item_image_padding_end">3.8dp</dimen>
+    <dimen name="card_view_rss_item_image_padding_top">3.8dp</dimen>
+
+    <dimen name="card_view_rss_item_description_height">200dp</dimen>
+    <dimen name="card_view_rss_item_description_padding_start">3.8dp</dimen>
+    <dimen name="card_view_rss_item_description_padding_end">3.8dp</dimen>
+    <dimen name="card_view_rss_item_description_padding_top">3.8dp</dimen>
+    <dimen name="card_view_rss_item_description_size">18sp</dimen>
+
+    <dimen name="card_view_rss_item_text_height">80dp</dimen>
+    <dimen name="card_view_rss_item_text_padding_start">3.8dp</dimen>
+    <dimen name="card_view_rss_item_text_padding_end">3.8dp</dimen>
+    <dimen name="card_view_rss_item_text_padding_top">3.8dp</dimen>
+    <dimen name="card_view_rss_item_text_size">18sp</dimen>
 </resources>

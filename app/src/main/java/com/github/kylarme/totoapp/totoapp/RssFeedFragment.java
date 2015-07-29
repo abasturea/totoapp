@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ public class RssFeedFragment extends Fragment {
 
     private static RecyclerView mItemsView;
 
-    private GridLayoutManager mGridLayoutManager;
+    private StaggeredGridLayoutManager mGridLayoutManager;
     private int mSpanCount;
 
     private static RssAdapter sRssAdapter;
@@ -152,12 +153,14 @@ public class RssFeedFragment extends Fragment {
         }
 
         if (Utils.Device.getDeviceScreenOrientation(mActivity) == Configuration.ORIENTATION_LANDSCAPE) {
-            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount + 1);
+//            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount + 1);
+            mGridLayoutManager = new StaggeredGridLayoutManager(mSpanCount + 1, StaggeredGridLayoutManager.VERTICAL);
         } else {
-            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount);
+//            mGridLayoutManager = new GridLayoutManager(mActivity, mSpanCount);
+            mGridLayoutManager = new StaggeredGridLayoutManager(mSpanCount , StaggeredGridLayoutManager.VERTICAL);
         }
 
-        mGridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        mGridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         mItemsView.setLayoutManager(mGridLayoutManager);
     }
@@ -190,7 +193,7 @@ public class RssFeedFragment extends Fragment {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
-            if(aBoolean){
+            if (aBoolean) {
                 mItemsView.invalidate();
                 sRssAdapter.setData(rssItems);
             }
